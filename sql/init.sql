@@ -1,16 +1,17 @@
 -- Initialize database
-CREATE DATABASE IF NOT EXISTS usha_database;
+CREATE DATABASE IF NOT EXISTS bakery_database;
 
-USE usha_database;
+USE bakery_database;
 
--- -- Create table
--- CREATE TABLE
---     IF NOT EXISTS table_name
--- VALUES
---     ();
+-- Create table
+CREATE TABLE
+    IF NOT EXISTS orders
+VALUES
+    ();
+
 SELECT
     *
 FROM
-    user_info
+    orders
 LIMIT
     1;
