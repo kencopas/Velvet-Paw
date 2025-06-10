@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Website Title</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Website Logo Name</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Welcome</a>
+        <a href="#">About</a>
+      </nav>
+    </header>
+
+    <section class="title-section">
+      <div class="title-text">
+        <font>Title words</font>
+        <p>
+          <br />
+          Welcome to this website, we are dedicated to this and that and the other.
+        </p>
+        <button>Get Started</button>
+      </div>
+      <div class="title-image">
+        <img
+          src="{{ url_for('static', filename='images/test.jpg') }}"
+          alt="Test Image"
+        />
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+        <section class="card-section">
+      <h2>Info Cards</h2>
+      <div class="info-cards">
+        <div class="card">
+          <h3>Card One</h3>
+          <p>Short description.</p>
+        </div>
+        <div class="card">
+          <h3>Card Two</h3>
+          <p>Short description.</p>
+        </div>
+        <div class="card">
+          <h3>Card Three</h3>
+          <p>Short description.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote-section">
+      <h2>Section Title</h2>
+      <blockquote>
+        “This is a quote from someone.”
+        <footer>— Someone R., Tampa, FL</footer>
+      </blockquote>
+    </section>
+
+    <!-- Calendly Seciont -->
+    <section class="calendly-section">
+      <div class="calendly-container">
+        <h2>📅 Schedule a Free Consultation</h2>
+        <p>Pick a time that works best for you using the calendar below.</p>
+
+        <!-- Calendly Inline Embed -->
+        <div
+          class="calendly-inline-widget"
+          data-url="{{ calendly_url }}"
+          style="min-width:320px; height:630px;">
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Section | /submit endpoint -->
+
+    <section class="form-section" id="quote">
+      <h2>Get a Quote</h2>
+      <form id="formId" method="POST" action="{{ url_for('submit') }}">
+        <div class="form-group">
+          <!-- First Name -->
+          <input
+            type="text"
+            id="first_name"
+            name="first_name"
+            required
+            pattern="[A-Za-z\s\-]+"
+            placeholder="First Name"
+          />
+          <!-- Last Name -->
+          <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            required
+            pattern="[A-Za-z\s\-]+"
+            placeholder="Last Name"
+          />
+        </div>
+
+        <div class="form-group">
+          <!-- Email -->
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="Email"
+          />
+          <!-- Phone Number -->
+          <input
+            type="tel"
+            id="phone_number"
+            name="phone_number"
+            required
+            pattern="\d{10}"
+            placeholder="Phone Number (10 digits)"
+          />
+        </div>
+
+        <div class="form-group">
+          <!-- Zip Code -->
+          <input
+            type="text"
+            id="zipcode"
+            name="zipcode"
+            required
+            pattern="\d{5}"
+            placeholder="ZIP Code"
+          />
+          <!-- State -->
+          <input
+            type="text"
+            id="state"
+            name="state"
+            required
+            maxlength="2"
+            placeholder="State (e.g., FL)"
+          />
+        </div>
+
+        <button type="submit" id="submitBtn">Submit</button>
+      </form>
+    </section>
+
+    <!-- Official footer -->
+    <footer>
+      <p>&copy; 2025 Website/Company Name. All rights reserved.</p>
+    </footer>
+
+    <!-- Reference main.js -->
+    <script
+      type="module"
+      src="{{ url_for('static', filename='main.js') }}"
+    ></script>
+  </body>
+</html>
