@@ -187,18 +187,26 @@ def success():
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
     try:
+        cart = request.get_json()
+        print(cart)
+
+        item_entries = [
+            (item, info['price'], info['qty'])
+            for item, info in cart.items()
+        ]
+
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
                 'price_data': {
                     'currency': 'usd',
-                    'unit_amount': 5000,  # $50.00
+                    'unit_amount': price*100,  # $50.00
                     'product_data': {
-                        'name': 'Custom Cake',
+                        'name': item,
                     },
                 },
-                'quantity': 1,
-            }],
+                'quantity': qty,
+            } for item, price, qty in item_entries],
             mode='payment',
             success_url='https://velvetpawbakery.com/success',
             cancel_url='https://velvetpawbakery.com/cancel',

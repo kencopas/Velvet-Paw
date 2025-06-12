@@ -1,84 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkout | The Velvet Paw Bakery</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet">
-   
-</head>
-<body>
-  <header>
-    <div class="logo">The Velvet Paw</div>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/menu">Menu</a>
-      <a href="#">About</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | The Velvet Paw Bakery</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo">The Velvet Paw</div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/menu">Menu</a>
+        <a href="#">About</a>
+      </nav>
+    </header>
 
-  <main>
-    <section class="menu-hero">
-      <h1>Checkout</h1>
-      <p>Review your order before placing it.</p>
-    </section>
+    <main>
+      <section class="menu-hero">
+        <h1>Checkout</h1>
+        <p>Review your order before placing it.</p>
+      </section>
 
-    <section class="menu-section">
-      <ul id="checkout-items" class="menu-list"></ul>
-      <p style="text-align: right; font-weight: bold; font-size: 18px;">
-        Total: $<span id="checkout-total">0.00</span>
-      </p>
-      <button id="checkout-button" type="button" class="place-order" style="margin-top: 20px;">Place Order</button>
-    </section>
-  </main>
+      <section class="menu-section">
+        <ul id="checkout-items" class="menu-list"></ul>
+        <p style="text-align: right; font-weight: bold; font-size: 18px">
+          Total: $<span id="checkout-total">0.00</span>
+        </p>
+        <button
+          id="checkout-button"
+          type="button"
+          class="place-order"
+          style="margin-top: 20px"
+        >
+          Place Order
+        </button>
+      </section>
+    </main>
 
-  <footer>
-    <p>&copy; 2025 The Velvet Paw Bakery. Baked with love in Tampa, FL.</p>
-  </footer>
-  <script src="https://js.stripe.com/v3/"></script>
-  <script>
-    const stripe = Stripe("{{ stripe_public_key }}");
+    <footer>
+      <p>&copy; 2025 The Velvet Paw Bakery. Baked with love in Tampa, FL.</p>
+    </footer>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      const stripe = Stripe("{{ stripe_public_key }}");
+      const cart = JSON.parse(localStorage.getItem("cart") || "{}");
 
-    document.getElementById("checkout-button").addEventListener("click", () => {
-        fetch("/create-checkout-session", {
+      document
+        .getElementById("checkout-button")
+        .addEventListener("click", () => {
+          fetch("/create-checkout-session", {
             method: "POST",
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            return stripe.redirectToCheckout({ sessionId: data.id });
-        })
-        .catch((err) => console.error("Stripe error:", err));
-    });
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              return stripe.redirectToCheckout({ sessionId: data.id });
+            })
+            .catch((err) => console.error("Stripe error:", err));
+        });
 
-    function renderCheckoutCart() {
-      const cart = JSON.parse(localStorage.getItem('cart') || '{}');
-      const container = document.getElementById('checkout-items');
-      const totalElement = document.getElementById('checkout-total');
-      container.innerHTML = '';
+      function renderCheckoutCart() {
+        const container = document.getElementById("checkout-items");
+        const totalElement = document.getElementById("checkout-total");
+        container.innerHTML = "";
 
-      let total = 0;
+        let total = 0;
 
-      for (const [item, details] of Object.entries(cart)) {
-        const li = document.createElement('li');
-        li.innerHTML = `
+        for (const [item, details] of Object.entries(cart)) {
+          const li = document.createElement("li");
+          li.innerHTML = `
           <span>${item}</span>
           <span>$${details.price.toFixed(2)} x ${details.qty}</span>
         `;
-        container.appendChild(li);
-        total += details.price * details.qty;
+          container.appendChild(li);
+          total += details.price * details.qty;
+        }
+
+        totalElement.textContent = total.toFixed(2);
       }
 
-      totalElement.textContent = total.toFixed(2);
-    }
+      // function completeOrder() {
+      //   alert('Thank you for your order!');
+      //   localStorage.removeItem('cart');
+      //   window.location.href = '/thank-you';
+      // }
 
-    // function completeOrder() {
-    //   alert('Thank you for your order!');
-    //   localStorage.removeItem('cart');
-    //   window.location.href = '/thank-you';
-    // }
-
-    document.addEventListener('DOMContentLoaded', renderCheckoutCart);
-  </script>
-</body>
+      document.addEventListener("DOMContentLoaded", renderCheckoutCart);
+    </script>
+  </body>
 </html>
