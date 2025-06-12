@@ -13,7 +13,7 @@
     <div class="logo">The Velvet Paw</div>
     <nav>
       <a href="#">Home</a>
-      <a href="#">Menu</a>
+      <a href="/menu">Menu</a>
       <a href="#">About</a>
     </nav>
   </header>
@@ -22,67 +22,71 @@
     <div class="title-text">
       <font>Freshly Baked, Pawsitively Delicious</font>
       <p><br />Welcome to The Velvet Paw, where every bite is a whisker-licking treat crafted with love and tradition.</p>
-      <button>Browse Menu</button>
+      <button onclick="window.location.href='/menu'">Browse Menu</button>
     </div>
     <div class="title-image">
       <img src="{{ url_for('static', filename='images/bakery.jpg') }}" alt="Fresh pastries" />
     </div>
   </section>
 
-  <hr class="divider" />
+    <hr class="divider" />
 
-  <section class="card-section">
-    <h2>Our Specialties</h2>
-    <div class="info-cards">
-      <div class="card">
-        <h3>Artisan Breads</h3>
-        <p>Warm, crusty, and made daily from scratch.</p>
+    <section class="card-section">
+      <h2>Our Specialties</h2>
+      <div class="info-cards">
+        <article class="card">
+          <h3>Artisan Breads</h3>
+          <p>Warm, crusty, and made daily from scratch.</p>
+        </article>
+        <article class="card">
+          <h3>Custom Cakes</h3>
+          <p>Perfect for birthdays, weddings, or celebrations.</p>
+        </article>
+        <article class="card">
+          <h3>Pastries & Sweets</h3>
+          <p>Buttery croissants, cupcakes, and more.</p>
+        </article>
       </div>
-      <div class="card">
-        <h3>Custom Cakes</h3>
-        <p>Perfect for birthdays, weddings, or celebrations.</p>
-      </div>
-      <div class="card">
-        <h3>Pastries & Sweets</h3>
-        <p>Buttery croissants, cupcakes, and more.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="quote-section">
-    <h2>What Our Customers Say</h2>
-    <blockquote>
-      “The Velvet Paw is my go-to for every sweet tooth craving. The cinnamon rolls are to die for!”
-      <footer>— Jamie L., Tampa, FL</footer>
-    </blockquote>
-  </section>
+    <section class="quote-section">
+      <h2>What Our Customers Say</h2>
+      <blockquote cite="https://example.com/reviews">
+        <p>“The Velvet Paw is my go-to for every sweet tooth craving. The cinnamon rolls are to die for!”</p>
+        <footer>— Jamie L., Tampa, FL</footer>
+      </blockquote>
+    </section>
 
-  <section class="calendly-section">
-    <div class="calendly-container">
-      <h2>📅 Book a Custom Order Consultation</h2>
-      <p>Need a cake or custom order? Book a free consultation with us!</p>
-      <div class="calendly-inline-widget" data-url="{{ calendly_url }}" style="min-width:320px; height:630px;"></div>
-    </div>
-  </section>
+    <section class="calendly-section">
+      <div class="calendly-container">
+        <h2>📅 Book a Catering Event</h2>
+        <p>Need a cake or custom order? Book a catering event with us!</p>
+        <div class="calendly-inline-widget" data-url="{{ calendly_url }}" style="min-width:320px; height:630px;"></div>
+      </div>
+    </section>
 
-  <section class="form-section" id="quote">
-    <h2>Request a Quote</h2>
-    <form id="formId" method="POST" action="{{ url_for('submit') }}">
-      <div class="form-group">
-        <input type="text" name="first_name" required pattern="[A-Za-z\s\-]+" placeholder="First Name" />
-        <input type="text" name="last_name" required pattern="[A-Za-z\s\-]+" placeholder="Last Name" />
-      </div>
-      <div class="form-group">
-        <input type="email" name="email" required placeholder="Email" />
-        <input type="tel" name="phone_number" required pattern="\d{10}" placeholder="Phone Number (10 digits)" />
-      </div>
-      <div class="form-group">
-        <input type="text" name="zipcode" required pattern="\d{5}" placeholder="ZIP Code" />
-        <input type="text" name="state" required maxlength="2" placeholder="State (e.g., FL)" />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-  </section>
+    <section class="form-section" id="quote">
+      <h2>Get in Contact</h2>
+      <form id="formId" method="POST" action="{{ url_for('submit') }}" aria-label="Contact Form">
+        <fieldset>
+          <legend>Contact Info</legend>
+          <div class="form-group">
+            <input type="text" name="first_name" required pattern="[A-Za-z\s\-]+" placeholder="First Name" aria-label="First Name" />
+            <input type="text" name="last_name" required pattern="[A-Za-z\s\-]+" placeholder="Last Name" aria-label="Last Name" />
+          </div>
+          <div class="form-group">
+            <input type="email" name="email" required placeholder="Email Address" aria-label="Email" />
+            <input type="tel" name="phone_number" required pattern="\d{10}" placeholder="Phone Number (10 digits)" aria-label="Phone Number" />
+          </div>
+          <div class="form-group">
+            <input type="text" name="zipcode" required pattern="\d{5}" placeholder="ZIP Code" aria-label="ZIP Code" />
+            <input type="text" name="state" required maxlength="2" placeholder="State (e.g., FL)" aria-label="State" />
+          </div>
+        </fieldset>
+        <button type="submit" class="button">Submit</button>
+      </form>
+    </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 The Velvet Paw Bakery. Baked with love in Tampa, FL.</p>

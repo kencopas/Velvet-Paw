@@ -140,12 +140,14 @@ nav a:hover {
 .quote-section blockquote {
   font-style: italic;
   color: #7d5c52;
+  /* previously used for quotes */
 }
 
 .quote-section footer {
   margin-top: 10px;
   font-weight: bold;
-  color: #4a2c2a;
+  background-color: #4a2c2a;
+  color: #7d5c52;
 }
 
 .calendly-section {
@@ -251,5 +253,105 @@ footer {
 }
 
 .return-home:hover {
+  background-color: #944d3d;
+}
+
+.menu-hero {
+  text-align: center;
+  padding: 60px 20px 30px;
+  background-color: #fffaf0;
+  color: #4a2c2a;
+}
+
+.menu-hero h1 {
+  font-size: 42px;
+  color: #b46a55;
+  margin-bottom: 10px;
+}
+
+.menu-section {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.menu-section h2 {
+  font-size: 28px;
+  color: #b46a55;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e7d6ce;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+}
+
+.menu-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e7d6ce;
+}
+
+.menu-list button {
+  background-color: #b46a55;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.menu-list button:hover {
+  background-color: #944d3d;
+}
+
+.cart {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  background-color: #fffaf0;
+  border: 1px solid #e7d6ce;
+  padding: 20px;
+  width: 240px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cart h3 {
+  margin-bottom: 10px;
+}
+
+.cart ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.cart button {
+  width: 100%;
+  padding: 10px;
+  background-color: #b46a55;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cart button:hover {
   background-color: #944d3d;
 }

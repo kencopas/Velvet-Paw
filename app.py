@@ -4,13 +4,77 @@ from dotenv import load_dotenv
 import smtplib
 from email.mime.text import MIMEText
 
-from utils.logging import debug, gotenv
+from utils.logging import gotenv
 from data_client import DataClient
 from constants import INDEX_VARS
 
 load_dotenv()
 app = Flask(__name__)
 _dc = None
+_cart = None
+
+
+# Function for retreiving the DataClient
+def get_dc() -> DataClient:
+    global _dc
+    if not _dc:
+        _dc = DataClient()
+    return _dc
+
+
+def get_cart() -> dict:
+    global _cart
+    if not _cart:
+        _cart = dict()
+    return _cart
+
+
+def send_twilio(body: str, to: str) -> str:
+    """
+    Send an SMS message with twilio.
+    """
+    account_sid = gotenv('TWILIO_ACCOUNT_SID')
+    auth_token = gotenv('TWILIO_AUTH_TOKEN')
+    phone_num = gotenv('TWILIO_PHONE_NUMBER')
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+        body=body,
+        from_=phone_num,
+        to=to
+    )
+
+    return message.sid
+
+
+def send_sms(phone_number, message):
+    """
+    Send an SMS message with smtp gmail.
+    """
+    gmail_user = gotenv('SMTP_GMAIL')
+    app_pass = gotenv('SMTP_APP_PASS')
+
+    to_number = f"{phone_number}@tmomail.net"
+
+    if not gmail_user or not app_pass:
+        print('environment variables unset')
+        print(gmail_user, app_pass)
+        return
+
+    msg = MIMEText(str(message))
+    msg['From'] = gmail_user
+    msg['To'] = to_number
+    msg['Subject'] = ' '
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(gmail_user, app_pass)
+        server.sendmail(gmail_user, to_number, msg.as_string())
+        server.quit()
+        print("SMS sent successfully!")
+    except Exception as e:
+        print("Failed to send SMS:", e)
 
 
 @app.route("/view-database")
@@ -48,74 +112,32 @@ def private_endpoint():
         return f"Empty table {table}"
 
 
-# This endpoint can be used for booking with calendly if applicable
-@app.route("/book", methods=['POST', 'GET', 'OPTIONS'])
-def book():
-    print('book()')
-    return render_template("book.html")
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
 
 
-# Function for retreiving the DataClient
-@debug
-def get_dc() -> DataClient:
-    global _dc
-    if _dc is None:
-        _dc = DataClient()
-    return _dc
+@app.route('/add_item', methods=['POST'])
+def add_item():
 
+    # Retrieve the cart and added item
+    cart = get_cart()
+    data = request.get_json()
+    item, price = data['item'], data['price']
 
-@debug
-def send_twilio(body: str, to: str) -> str:
-    """
-    Send an SMS message with twilio.
-    """
-    account_sid = gotenv('TWILIO_ACCOUNT_SID')
-    auth_token = gotenv('TWILIO_AUTH_TOKEN')
-    phone_num = gotenv('TWILIO_PHONE_NUMBER')
-    client = Client(account_sid, auth_token)
+    print(f"Cart: {cart}\n\nItem: {item}")
 
-    message = client.messages.create(
-        body=body,
-        from_=phone_num,
-        to=to
-    )
-
-    return message.sid
-
-
-@debug
-def send_sms(phone_number, message):
-    """
-    Send an SMS message with smtp gmail.
-    """
-    gmail_user = gotenv('SMTP_GMAIL')
-    app_pass = gotenv('SMTP_APP_PASS')
-
-    to_number = f"{phone_number}@tmomail.net"
-
-    if not gmail_user or not app_pass:
-        print('environment variables unset')
-        print(gmail_user, app_pass)
-        return
-
-    msg = MIMEText(str(message))
-    msg['From'] = gmail_user
-    msg['To'] = to_number
-    msg['Subject'] = ' '
-
-    try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(gmail_user, app_pass)
-        server.sendmail(gmail_user, to_number, msg.as_string())
-        server.quit()
-        print("SMS sent successfully!")
-    except Exception as e:
-        print("Failed to send SMS:", e)
+    # Add or update the item
+    if cart.get(item):
+        cart['item']['qty'] += 1
+    else:
+        cart['item'] = {
+            'price': price,
+            'qty': 1
+        }
 
 
 # Render index.html at the root url
-@debug
 @app.route("/")
 def home():
     # Retrieve all specified environment variables and pass to index.html
@@ -124,7 +146,6 @@ def home():
 
 
 # Example submission endpoint
-@debug
 @app.route("/submit", methods=['POST'])
 def submit():
     """
