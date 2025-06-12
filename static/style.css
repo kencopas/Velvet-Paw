@@ -355,3 +355,20 @@ footer {
 .cart button:hover {
   background-color: #944d3d;
 }
+
+button.place-order {
+  background-color: #b46a55;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: block;
+  margin: 30px auto 0;
+}
+
+button.place-order:hover {
+  background-color: #944d3d;
+}

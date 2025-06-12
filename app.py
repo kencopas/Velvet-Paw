@@ -1,7 +1,9 @@
-from flask import Flask, request, render_template, abort
+import stripe
+from flask import Flask, request, render_template, abort, jsonify
 from twilio.rest import Client
 from dotenv import load_dotenv
 import smtplib
+from email.message import EmailMessage
 from email.mime.text import MIMEText
 
 from utils.logging import gotenv
@@ -9,6 +11,7 @@ from data_client import DataClient
 from constants import INDEX_VARS
 
 load_dotenv()
+stripe.api_key = gotenv("STRIPE_SECRET_KEY")
 app = Flask(__name__)
 _dc = None
 _cart = None
@@ -77,6 +80,33 @@ def send_sms(phone_number, message):
         print("Failed to send SMS:", e)
 
 
+def send_email(name, email, message):
+    msg = EmailMessage()
+    msg['Subject'] = f'New Contact Form Submission from {name}'
+    msg['From'] = gotenv("EMAIL_USER")      # Your email address
+    msg['To'] = gotenv("EMAIL_RECEIVER")    # Your inbox
+
+    msg.set_content(f"From: {name}\nEmail: {email}\n\nMessage:\n{message}")
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(gotenv("EMAIL_USER"), gotenv("EMAIL_PASS"))
+        smtp.send_message(msg)
+
+
+@app.route('/contact', methods=['POST'])
+def contact():
+    name = request.form['name']
+    email = request.form['email']
+    message = "Hello test."
+
+    try:
+        send_email(name, email, message)
+        return "Message sent successfully."
+    except Exception as e:
+        print(e)
+        return "Failed to send message.", 500
+
+
 @app.route("/view-database")
 def private_endpoint():
     """
@@ -120,21 +150,67 @@ def menu():
 @app.route('/add_item', methods=['POST'])
 def add_item():
 
-    # Retrieve the cart and added item
-    cart = get_cart()
-    data = request.get_json()
-    item, price = data['item'], data['price']
+    try:
 
-    print(f"Cart: {cart}\n\nItem: {item}")
+        # Retrieve the cart and added item
+        cart = get_cart()
+        data = request.get_json()
+        item, price = data['item'], data['price']
 
-    # Add or update the item
-    if cart.get(item):
-        cart['item']['qty'] += 1
-    else:
-        cart['item'] = {
-            'price': price,
-            'qty': 1
-        }
+        print(f"Cart: {cart}\n\nItem: {item}")
+
+        # Add or update the item
+        if cart.get(item):
+            cart[item]['qty'] += 1
+        else:
+            cart[item] = { 
+                'price': price,
+                'qty': 1
+            }
+
+        return jsonify({'message': 'Item added to cart.', 'cart': cart}), 200
+
+    except Exception as err:
+        return jsonify({'message': err})
+
+
+@app.route('/checkout', methods=['GET'])
+def checkout():
+    return render_template('checkout.html', stripe_public_key=gotenv("STRIPE_PUBLIC_KEY"))
+
+
+@app.route('/success')
+def success():
+    return jsonify({'message': 'helo wrld'})
+
+
+@app.route('/create-checkout-session', methods=['POST'])
+def create_checkout_session():
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': 5000,  # $50.00
+                    'product_data': {
+                        'name': 'Custom Cake',
+                    },
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url='https://velvetpawbakery.com/success',
+            cancel_url='https://velvetpawbakery.com/cancel',
+        )
+        return jsonify({'id': session.id})
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
+@app.route("/thank-you")
+def thank_you():
+    return render_template('thank-you.html')
 
 
 # Render index.html at the root url
@@ -166,4 +242,4 @@ def submit():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5000)

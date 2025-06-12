@@ -65,27 +65,26 @@
       </div>
     </section>
 
-    <section class="form-section" id="quote">
+    <section class="form-section" id="contact">
       <h2>Get in Contact</h2>
-      <form id="formId" method="POST" action="{{ url_for('submit') }}" aria-label="Contact Form">
+      <form id="contactForm" method="POST" action="{{ url_for('contact') }}" aria-label="Contact Form">
         <fieldset>
           <legend>Contact Info</legend>
+
           <div class="form-group">
-            <input type="text" name="first_name" required pattern="[A-Za-z\s\-]+" placeholder="First Name" aria-label="First Name" />
-            <input type="text" name="last_name" required pattern="[A-Za-z\s\-]+" placeholder="Last Name" aria-label="Last Name" />
-          </div>
-          <div class="form-group">
+            <input type="text" name="name" required pattern="[A-Za-z\s\-]+" placeholder="Full Name" aria-label="Full Name" />
             <input type="email" name="email" required placeholder="Email Address" aria-label="Email" />
-            <input type="tel" name="phone_number" required pattern="\d{10}" placeholder="Phone Number (10 digits)" aria-label="Phone Number" />
           </div>
+
           <div class="form-group">
-            <input type="text" name="zipcode" required pattern="\d{5}" placeholder="ZIP Code" aria-label="ZIP Code" />
-            <input type="text" name="state" required maxlength="2" placeholder="State (e.g., FL)" aria-label="State" />
+            <textarea name="message" required rows="5" placeholder="Your Message" aria-label="Message" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-family: 'Montserrat', sans-serif;"></textarea>
           </div>
         </fieldset>
+
         <button type="submit" class="button">Submit</button>
       </form>
     </section>
+
   </main>
 
   <footer>

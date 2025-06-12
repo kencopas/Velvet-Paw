@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You | The Velvet Paw Bakery</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">The Velvet Paw</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/menu">Menu</a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="thank-you">
+      <h1>Thank You!</h1>
+      <p>Your order has been received and is being prepared with care.</p>
+      <p>We appreciate your support of our bakery.</p>
+      <button class="return-home" onclick="window.location.href='/'">Return Home</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 The Velvet Paw Bakery. Baked with love in Tampa, FL.</p>
+  </footer>
+</body>
+</html>
