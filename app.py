@@ -11,7 +11,7 @@ from data_client import DataClient
 from constants import INDEX_VARS
 
 load_dotenv()
-stripe.api_key = gotenv("STRIPE_SECRET_KEY")
+stripe.api_key = gotenv("REAL_STRIPE_SECRET_KEY")
 app = Flask(__name__)
 _dc = None
 _cart = None
@@ -95,16 +95,27 @@ def send_email(name, email, message):
 
 @app.route('/contact', methods=['POST'])
 def contact():
+
     name = request.form['name']
     email = request.form['email']
-    message = "Hello test."
+    message = request.form['message']
 
     try:
         send_email(name, email, message)
-        return "Message sent successfully."
+        return render_template('index.html', show_modal=True, modal_type='success')
     except Exception as e:
         print(e)
-        return "Failed to send message.", 500
+        return render_template('index.html', show_modal=True, modal_type='error')
+
+
+@app.before_request
+def log_ip():
+    print(f"Request from IP: {request.remote_addr} to {request.path}")
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 @app.route("/view-database")
@@ -174,14 +185,15 @@ def add_item():
         return jsonify({'message': err})
 
 
+@app.route('/cancel')
 @app.route('/checkout', methods=['GET'])
 def checkout():
-    return render_template('checkout.html', stripe_public_key=gotenv("STRIPE_PUBLIC_KEY"))
+    return render_template('checkout.html', stripe_public_key=gotenv("REAL_STRIPE_PUBLIC_KEY"))
 
 
 @app.route('/success')
 def success():
-    return jsonify({'message': 'helo wrld'})
+    return render_template('order-placed.html')
 
 
 @app.route('/create-checkout-session', methods=['POST'])
@@ -200,7 +212,7 @@ def create_checkout_session():
             line_items=[{
                 'price_data': {
                     'currency': 'usd',
-                    'unit_amount': price*100,  # $50.00
+                    'unit_amount': int(price*100),  # $50.00
                     'product_data': {
                         'name': item,
                     },
@@ -213,6 +225,7 @@ def create_checkout_session():
         )
         return jsonify({'id': session.id})
     except Exception as e:
+        print(e)
         return jsonify(error=str(e)), 500
 
 

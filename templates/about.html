@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" content="About Us - The Velvet Paw Bakery" />
+  <meta property="og:description" content="Meet the team behind The Velvet Paw Bakery – your source for handmade artisan treats." />
+  <meta property="og:image" content="https://velvetpawbakery.com/static/images/preview.png" />
+  <meta property="og:url" content="https://velvetpawbakery.com/about" />
+  <meta property="og:type" content="website" />
+  <title>About Us | The Velvet Paw Bakery</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">The Velvet Paw</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/menu">Menu</a>
+      <a href="/about">About</a>
+    </nav>
+  </header>
+
+  <section class="title-section">
+    <div class="title-text">
+      <font>Our Story</font>
+      <p><br />At The Velvet Paw Bakery, we believe every treat tells a story — one of love, tradition, and community. What began as a humble kitchen project quickly grew into a neighborhood favorite, cherished for its passion and paw-sitive vibes.</p>
+    </div>
+    <div class="title-image">
+      <img src="{{ url_for('static', filename='images/team.jpg') }}" alt="Our Team Baking Together" />
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="card-section">
+    <h2>Why Choose Us?</h2>
+    <div class="info-cards">
+      <article class="card">
+        <h3>Locally Sourced</h3>
+        <p>We support local farms and use fresh, natural ingredients in every bake.</p>
+      </article>
+      <article class="card">
+        <h3>For You & Your Pets</h3>
+        <p>Our recipes are designed with both humans and furry friends in mind.</p>
+      </article>
+      <article class="card">
+        <h3>Community First</h3>
+        <p>From charity events to birthday parties, we’re more than just a bakery — we’re family.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <h2>Meet the Bakers</h2>
+    <div style="max-width: 800px; margin: auto; text-align: center;">
+      <p style="margin-bottom: 20px;">
+        Our team is a mix of seasoned pastry chefs, animal lovers, and community builders — all united by a shared love of baking and bringing smiles to faces (and tails).
+      </p>
+      <img src="{{ url_for('static', filename='images/bakers.jpg') }}" alt="Bakers of Velvet Paw" style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 The Velvet Paw Bakery. Baked with love in Tampa, FL.</p>
+  </footer>
+</body>
+</html>

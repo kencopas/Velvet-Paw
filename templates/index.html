@@ -23,7 +23,7 @@
     <nav>
       <a href="#">Home</a>
       <a href="/menu">Menu</a>
-      <a href="#">About</a>
+      <a href="/about">About</a>
     </nav>
   </header>
 
@@ -76,7 +76,7 @@
 
     <section class="form-section" id="contact">
       <h2>Get in Contact</h2>
-      <form id="contactForm" method="POST" action="{{ url_for('contact') }}" aria-label="Contact Form">
+      <form id="contactForm" method="POST" action="/contact" aria-label="Contact Form">
         <fieldset>
           <legend>Contact Info</legend>
 
@@ -93,12 +93,56 @@
         <button type="submit" class="button">Submit</button>
       </form>
     </section>
+    <div id="contactModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 id="modal-title">Message Sent!</h2>
+        <p id="modal-body">Thank you for reaching out. We’ll get back to you shortly.</p>
+      </div>
+    </div>
 
   </main>
 
   <footer>
     <p>&copy; 2025 The Velvet Paw Bakery. Baked with love in Tampa, FL.</p>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("contactModal");
+
+      {% if show_modal %}
+      if (modal) {
+        modal.style.display = "block";
+
+        const title = document.getElementById("modal-title");
+        const body = document.getElementById("modal-body");
+
+        {% if modal_type == "success" %}
+        title.textContent = "Message Sent!";
+        body.textContent = "Thank you for reaching out. We'll be in touch soon.";
+        {% elif modal_type == "error" %}
+        title.textContent = "Error Sending Message";
+        body.textContent = "Something went wrong. Please try again.";
+        {% endif %}
+      }
+      {% endif %}
+
+      const closeBtn = document.querySelector(".close-button");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+      }
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    });
+  </script>
+
 
   <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
